@@ -22,10 +22,10 @@ async function main() {
     const userId = urlParams.get('id');
     console.log('取得したuserId:', userId);
 
-    // if (!userId) {
-    //   document.getElementById('status').innerText = 'URLにIDがありません';
-    //   return;
-    // }
+    if (!userId) {
+      document.getElementById('status').innerText = 'URLにIDがありません';
+      return;
+    }
 
     // ログインしていない場合はログイン
     if (!liff.isLoggedIn()) {
