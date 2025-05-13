@@ -15,6 +15,7 @@
   try {
     // LIFF初期化
     await liff.init({ liffId: "2007402756-opA2x8xg" });
+    console.log('サーバーからの応答:');
 
     // URLからuserIdを取得（メールのURLに?id=1の形式で渡されていることを想定）
     const urlParams = new URLSearchParams(window.location.search);
