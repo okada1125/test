@@ -12,35 +12,42 @@
   <script>
     async function main() {
       try {
+        // URLクエリからidを取得して保存（初回アクセス時のみ）
+        const urlParams = new URLSearchParams(window.location.search);
+        const userIdFromUrl = urlParams.get('id');
+        if (userIdFromUrl) {
+          sessionStorage.setItem('userId', userIdFromUrl);
+        }
+
         // LIFF初期化
         await liff.init({ liffId: "2007402756-opA2x8xg" });
 
-        // URLからuserId取得（例: ?id=1）
-        const urlParams = new URLSearchParams(window.location.search);
-        const userId = urlParams.get('id');
+        // userIdがセッションにあるか確認
+        const userId = sessionStorage.getItem('userId');
         if (!userId) {
           document.getElementById('status').innerText = 'URLにIDがありません';
           return;
         }
 
-        // ↓↓↓ テストモード：ログアウトして再ログインする
-        if (liff.isLoggedIn()) {
-          liff.logout();
+        // ログインしていない場合はリダイレクト（パラメータなし）
+        if (!liff.isLoggedIn()) {
+          liff.login({ redirectUri: "https://okada1125.github.io/test/" });
+          return;
         }
 
-        // 強制ログイン（userId付きのURLに戻る）
-        liff.login({ redirectUri: `https://liff.line.me/2007402756-opA2x8xg/?id=${userId}` });
-        return;
-
-        // 以下、本番用処理（実行されないが、ログアウトテスト後に使える）
+        // LINEユーザーIDの取得
         const profile = await liff.getProfile();
         const lineUserId = profile.userId;
 
-        const response = await fetch('https://script.google.com/macros/s/AKfycby_ViReBjNILIstcPUmPQloA51VhcuJ94QgZBL2VPpZw2G1EGAWzgU8uUyE613mmI7T1Q/exec', {
-          method: 'POST',
-          body: JSON.stringify({ userId, lineUserId }),
-          headers: { 'Content-Type': 'application/json' }
-        });
+        // Webアプリ（GAS）に送信
+        const response = await fetch(
+          'https://script.google.com/macros/s/AKfycby_ViReBjNILIstcPUmPQloA51VhcuJ94QgZBL2VPpZw2G1EGAWzgU8uUyE613mmI7T1Q/exec',
+          {
+            method: 'POST',
+            body: JSON.stringify({ userId, lineUserId }),
+            headers: { 'Content-Type': 'application/json' },
+          }
+        );
 
         const result = await response.json();
         document.getElementById('status').innerText = 'LINE ID 登録完了';
