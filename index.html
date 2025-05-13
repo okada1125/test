@@ -11,55 +11,53 @@
 
   <script>
   async function main() {
-    try {
-      await liff.init({ liffId: "2007402756-opA2x8xg" });
+    await liff.init({ liffId: "2007402756-opA2x8xg" });
 
-      // LIFFによって付けられたパラメータを処理
-      const urlParams = new URLSearchParams(window.location.search);
-      let userId = null;
+    const urlParams = new URLSearchParams(window.location.search);
+    let userId = null;
 
-      if (urlParams.get('liff.state')) {
-        // 例: liff.state=%3Fid%3D1 → ?id=1
-        const liffStateRaw = decodeURIComponent(urlParams.get('liff.state'));
-        const stateParams = new URLSearchParams(window.location.search).get('id');
-        userId = stateParams.get('id');
-      } else {
-        // fallback: 通常のURLパラメータ（liff未使用アクセス）
-        userId = urlParams.get('id');
-      }
-
-      if (!userId) {
-        document.getElementById('status').innerText = 'URLにuserIdがありません（liff.state）';
-        return;
-      }
-
-      document.getElementById('status').innerText = `受け取ったuserId: ${userId}`;
-
-      if (!liff.isLoggedIn()) {
-        liff.login();
-        return;
-      }
-
-      const profile = await liff.getProfile();
-      const lineUserId = profile.userId;
-
-      // GAS Webアプリに送信
-      fetch('https://script.google.com/macros/s/AKfycby_ViReBjNILIstcPUmPQloA51VhcuJ94QgZBL2VPpZw2G1EGAWzgU8uUyE613mmI7T1Q/exec', {
-        method: 'POST',
-        body: JSON.stringify({ userId, lineUserId }),
-        headers: { 'Content-Type': 'application/json' }
-      }).then(res => {
-        document.getElementById('status').innerText = '登録完了しました！';
-      }).catch(err => {
-        document.getElementById('status').innerText = '送信エラー：' + err;
-      });
-
-    } catch (e) {
-      document.getElementById('status').innerText = 'エラー発生：' + e.message;
+    // ① 通常のURLクエリから取得（ログインなしの場合）
+    if (urlParams.get('id')) {
+      userId = urlParams.get('id');
     }
+
+    // ② LIFFログイン後、liff.state に埋め込まれた値から取得
+    if (!userId && urlParams.get('liff.state')) {
+      const liffStateRaw = urlParams.get('liff.state'); // 例: "id%3D1"
+      const decodedState = decodeURIComponent(liffStateRaw); // "id=1"
+      const stateParams = new URLSearchParams(decodedState);
+      userId = stateParams.get('id');
+    }
+
+    if (!userId) {
+      document.getElementById('status').innerText = 'URLにuserIdがありません（liff.stateも含め）';
+      return;
+    }
+
+    document.getElementById('status').innerText = `受け取ったuserId: ${userId}`;
+
+    if (!liff.isLoggedIn()) {
+      liff.login();
+      return;
+    }
+
+    const profile = await liff.getProfile();
+    const lineUserId = profile.userId;
+
+    // GAS Webアプリに送信
+    fetch('https://script.google.com/macros/s/AKfycby_ViReBjNILIstcPUmPQloA51VhcuJ94QgZBL2VPpZw2G1EGAWzgU8uUyE613mmI7T1Q/exec', {
+      method: 'POST',
+      body: JSON.stringify({ userId, lineUserId }),
+      headers: { 'Content-Type': 'application/json' }
+    }).then(res => {
+      document.getElementById('status').innerText = '登録完了しました！';
+    }).catch(err => {
+      document.getElementById('status').innerText = '送信エラー：' + err;
+    });
   }
 
   main();
 </script>
+
 </body>
 </html>
