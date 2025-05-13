@@ -29,7 +29,7 @@
         if (!liff.isLoggedIn()) {
           // ログイン後に戻すURLにIDを追加（encodeURIComponentでURLエンコード）
           localStorage.setItem('userId', userId);
-          liff.login({ redirectUri: `https://liff.line.me/2007402756-opA2x8xg/?id=${encodeURIComponent(userId)}` });
+          liff.login({ redirectUri: `https://liff.line.me/2007402756-opA2x8xg/` });
           return;
         }
 
