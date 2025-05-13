@@ -54,6 +54,16 @@
         document.getElementById('status').innerText = 'エラーが発生しました';
       }
     }
+await fetch('https://script.google.com/macros/s/AKfycbw3KHm5sQMayz-UAtvPpKNxLR7Ka-tCbtT2RDKUVzMz__09s2B1lQ2QDa7HNgDD9r9qrg/exec', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    userId,
+    lineUserId
+  })
+});
 
     main();
   </script>
