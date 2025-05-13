@@ -10,50 +10,49 @@
   <p id="status">初期化中...</p>
 
   <script>
+    // LIFFの初期化
     async function main() {
-  try {
-    await liff.init({
-      liffId: "2007402756-opA2x8xg",
-      scope: "profile"  // 'profile'スコープを追加
-    });
+      try {
+        // LIFFアプリの初期化
+        await liff.init({ liffId: "2007402756-opA2x8xg" });
 
-    // URLからuserIdを取得（メールのURLに?id=1の形式で渡されていることを想定）
-    const urlParams = new URLSearchParams(window.location.search);
-    const userId = urlParams.get('id');
+        // URLからidパラメータを取得
+        const urlParams = new URLSearchParams(window.location.search);
+        const userId = urlParams.get('id');
 
-    if (!userId) {
-      document.getElementById('status').innerText = 'URLにIDがありません';
-      return;
+        if (!userId) {
+          document.getElementById('status').innerText = 'URLにIDがありません';
+          return;
+        }
+
+        // ログインしていない場合はログイン
+        if (!liff.isLoggedIn()) {
+          liff.login();
+          return;
+        }
+
+        // LINEユーザーIDの取得
+        const profile = await liff.getProfile();
+        const lineUserId = profile.userId;
+
+        // LINE IDとURLのIDをNotionに保存するためにGASに送信
+        const response = await fetch('https://script.google.com/macros/s/AKfycby_ViReBjNILIstcPUmPQloA51VhcuJ94QgZBL2VPpZw2G1EGAWzgU8uUyE613mmI7T1Q/exec', {
+          method: 'POST',
+          body: JSON.stringify({ lineUserId, userId }),
+          headers: { 'Content-Type': 'application/json' }
+        });
+
+        const result = await response.json();
+        document.getElementById('status').innerText = 'LINE ID 登録完了';
+        console.log('サーバーからの応答:', result);
+
+      } catch (error) {
+        console.error('エラー:', error);
+        document.getElementById('status').innerText = 'エラーが発生しました';
+      }
     }
 
-    // ログインしていない場合はログイン
-    if (!liff.isLoggedIn()) {
-      liff.login();
-      return;
-    }
-
-    // LINEユーザーIDの取得
-    const profile = await liff.getProfile();
-    const lineUserId = profile.userId;
-
-    // Webアプリ（GAS）に送信
-    const response = await fetch('https://script.google.com/macros/s/AKfycby_ViReBjNILIstcPUmPQloA51VhcuJ94QgZBL2VPpZw2G1EGAWzgU8uUyE613mmI7T1Q/exec', {
-      method: 'POST',
-      body: JSON.stringify({ userId, lineUserId }),
-      headers: { 'Content-Type': 'application/json' }
-    });
-
-    const result = await response.json();
-    document.getElementById('status').innerText = 'LINE ID 登録完了';
-    console.log('サーバーからの応答:', result);
-  } catch (error) {
-    console.error('エラー:', error);
-    document.getElementById('status').innerText = 'エラーが発生しました';
-  }
-}
-
-main();
-
+    main();
   </script>
 </body>
 </html>
