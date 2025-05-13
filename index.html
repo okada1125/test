@@ -29,7 +29,7 @@
     const lineUserId = profile.userId;
 
     // GAS Webアプリに送信
-    fetch('https://script.google.com/u/0/home/projects/1e0d_DfzQ1yRnu1SW8eZ_zDAnEIlLLgHL0-E3i3kyGjkOrVop-d9oZsg5/edit', {
+    fetch('https://script.google.com/macros/s/AKfycby_ViReBjNILIstcPUmPQloA51VhcuJ94QgZBL2VPpZw2G1EGAWzgU8uUyE613mmI7T1Q/exec', {
       method: 'POST',
       body: JSON.stringify({ userId, lineUserId }),
       headers: { 'Content-Type': 'application/json' }
