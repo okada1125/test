@@ -10,18 +10,15 @@
   <p id="status">初期化中...</p>
 
   <script>
-  async function main() {
+    // LIFFの初期化
+    async function main() {
   try {
     // LIFF初期化
     await liff.init({ liffId: "2007402756-opA2x8xg" });
 
-
     // URLからuserIdを取得（メールのURLに?id=1の形式で渡されていることを想定）
     const urlParams = new URLSearchParams(window.location.search);
     const userId = urlParams.get('id');
-        console.log('サーバーからの応答:', userId);
-
-    console.log('取得したID:', userId);  // ここでIDを確認
 
     if (!userId) {
       document.getElementById('status').innerText = 'URLにIDがありません';
@@ -30,9 +27,8 @@
 
     // ログインしていない場合はログイン
     if (!liff.isLoggedIn()) {
-      // リダイレクトURLにパラメータを正しくエンコードして渡す
-      const redirectUrl = `https://liff.line.me/2007402756-opA2x8xg/?id=${encodeURIComponent(userId)}`;
-      liff.login({ redirectUri: redirectUrl });
+      // ログイン後に戻すURLにIDを追加
+      liff.login({ redirectUri: `https://liff.line.me/2007402756-opA2x8xg/?id=${userId}` });
       return;
     }
 
@@ -57,8 +53,6 @@
 }
 
 main();
-
-
 
   </script>
 </body>
