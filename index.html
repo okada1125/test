@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>LINE連携</title>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+</head>
+<body>
+  <p>LINE連携中です...</p>
+  <script>
+    window.onload = async function () {
+      const params = new URLSearchParams(window.location.search);
+      const userId = params.get("id");  // Notionのunique_id
+
+      if (!userId) {
+        document.body.innerHTML = "URLにuserIdがありません";
+        return;
+      }
+
+      await liff.init({ liffId: "あなたのLIFF ID（例: 2007402756-opA2x8xg）" });
+
+      if (!liff.isLoggedIn()) {
+        liff.login();
+        return;
+      }
+
+      const profile = await liff.getProfile();
+      const lineUserId = profile.userId;
+
+      // GASにPOST
+      fetch("https://script.google.com/macros/s/AKfycbyI1HJZzhbGYqJliUpkETynwEmlGv45E0iDwUKMRVFI7dF8ZbSa8I6vyp2vMFCaIf_zyg/exec", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, lineUserId })
+      })
+      .then(() => {
+        document.body.innerHTML = "LINE連携が完了しました！";
+      })
+      .catch(err => {
+        document.body.innerHTML = "送信に失敗しました: " + err;
+      });
+    };
+  </script>
+</body>
+</html>
