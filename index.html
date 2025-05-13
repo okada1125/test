@@ -1,4 +1,16 @@
-async function main() {
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>LIFF Test</title>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+</head>
+<body>
+  <h1>LIFFアプリ</h1>
+  <p id="status">初期化中...</p>
+
+  <script>
+    async function main() {
   try {
     await liff.init({
       liffId: "2007402756-opA2x8xg",
@@ -41,3 +53,7 @@ async function main() {
 }
 
 main();
+
+  </script>
+</body>
+</html>
