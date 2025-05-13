@@ -10,40 +10,9 @@
   <p id="status">初期化中...</p>
 
   <script>
-  async function main() {
-  // LIFFアプリ起動時に、stateパラメータを設定
-liff.init({
-  liffId: "2007402756-opA2x8xg",
-  state: encodeURIComponent('?id=1')  // ここでidを渡す
-}).then(() => {
-  // 初期化後、必要な処理を実行
-});
-
-
-  // URLのクエリパラメータを取得
-  const urlParams = new URLSearchParams(window.location.search);
-  const liffState = urlParams.get('liff.state'); // 例: "?id=1"
-  
-  let userId = null;
-
-  if (liffState) {
-    try {
-      // liff.stateのデコード
-      const decodedParams = new URLSearchParams(decodeURIComponent(liffState));
-      userId = decodedParams.get('id');
-    } catch (error) {
-      console.error('liff.stateのデコードに失敗:', error);
-      document.getElementById('status').innerText = 'liff.stateのデコードに失敗';
-      return;
-    }
-  }
-
-  if (!userId) {
-    document.getElementById('status').innerText = 'URLにuserIdがありません（liff.state）';
-    return;
-  }
-
-  document.getElementById('status').innerText = `受け取ったuserId: ${userId}`;
+  // LIFF初期化
+async function main() {
+  await liff.init({ liffId: "YOUR_LIFF_ID" });
 
   // ログインしていない場合、ログインを促す
   if (!liff.isLoggedIn()) {
@@ -51,20 +20,22 @@ liff.init({
     return;
   }
 
-  // ログイン済みならプロフィール情報を取得
+  // ユーザーのLINEプロフィールを取得
   const profile = await liff.getProfile();
-  const lineUserId = profile.userId;
+  const lineUserId = profile.userId; // LINE IDを取得
 
-  // Notionに送信（ここでWebアプリURLにデータを送信）
+  // 取得したLINE IDをNotionに保存するためにWebアプリに送信
   fetch('https://YOUR_GAS_WEBAPP_URL', {
     method: 'POST',
-    body: JSON.stringify({ userId, lineUserId }),
+    body: JSON.stringify({ lineUserId: lineUserId }),
     headers: { 'Content-Type': 'application/json' }
-  }).then(res => {
-    document.getElementById('status').innerText = '登録完了しました！';
-  }).catch(err => {
-    document.getElementById('status').innerText = '送信エラー：' + err;
-  });
+  }).then(response => response.json())
+    .then(data => {
+      console.log('LINE IDが保存されました:', data);
+    })
+    .catch(error => {
+      console.error('エラーが発生しました:', error);
+    });
 }
 
 main();
