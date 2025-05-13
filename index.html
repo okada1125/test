@@ -11,7 +11,14 @@
 
   <script>
   async function main() {
-  await liff.init({ liffId: "2007402756-opA2x8xg" });
+  // LIFFアプリ起動時に、stateパラメータを設定
+liff.init({
+  liffId: "2007402756-opA2x8xg",
+  state: encodeURIComponent('?id=1')  // ここでidを渡す
+}).then(() => {
+  // 初期化後、必要な処理を実行
+});
+
 
   // URLのクエリパラメータを取得
   const urlParams = new URLSearchParams(window.location.search);
