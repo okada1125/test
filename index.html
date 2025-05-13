@@ -21,7 +21,7 @@
       if (urlParams.get('liff.state')) {
         // 例: liff.state=%3Fid%3D1 → ?id=1
         const liffStateRaw = decodeURIComponent(urlParams.get('liff.state'));
-        const stateParams = new URLSearchParams(liffStateRaw.startsWith('?') ? liffStateRaw.slice(1) : liffStateRaw);
+        const stateParams = new URLSearchParams(window.location.search).get('id');
         userId = stateParams.get('id');
       } else {
         // fallback: 通常のURLパラメータ（liff未使用アクセス）
