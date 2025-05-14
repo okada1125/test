@@ -44,11 +44,11 @@
           console.log('送信結果:', result);
         } else {
           console.error('GASのレスポンスエラー');
-          document.getElementById('status').innerText = 'エラーが発生しました';
+          document.getElementById('status').innerText = 'GASエラーが発生しました';
         }
       } catch (error) {
         console.error('エラー:', error);
-        document.getElementById('status').innerText = 'エあラーが発生しました';
+        document.getElementById('status').innerText = '普通のエラーが発生しました';
       }
     }
 
