@@ -12,11 +12,9 @@
   <script>
     async function main() {
       try {
-        // LIFF初期化
         await liff.init({ liffId: "2007402756-opA2x8xg" });
         console.log("LIFF initialized");
 
-        // URLから userId を取得 (?id=xxx の形式)
         const urlParams = new URLSearchParams(window.location.search);
         const userId = urlParams.get('id');
         if (!userId) {
@@ -24,42 +22,37 @@
           return;
         }
 
-        // ログインしていない場合、ログイン
         if (!liff.isLoggedIn()) {
           liff.login({ redirectUri: window.location.href });
           return;
         }
 
-        // LINEユーザープロフィール取得
         const profile = await liff.getProfile();
         const lineUserId = profile.userId;
 
-//         // ★ ここで fetch（GASへPOST） ★
-//         const response = await fetch('https://script.google.com/macros/s/AKfycbwbFgK5tWQ7CDA0G_zCNFQeSKCDj3lAGhrllLiYk_hehmYoTuYDqt6gA9_ciaSnGQxFzg/exec', {
-//   method: 'POST',
-//   headers: {
-//     'Content-Type': 'application/json'
-//   },
-//   body: JSON.stringify({ userId, lineUserId })
-// });
-
-// if (response.ok) {
-//   const result = await response.json();
-//   document.getElementById('status').innerText = 'LINE ID 登録完了';
-// } else {
-//   console.error('GASのレスポンスエラー');
-//   document.getElementById('status').innerText = 'エラーが発生しました';
-// }
         const response = await fetch('https://script.google.com/macros/s/AKfycbwbFgK5tWQ7CDA0G_zCNFQeSKCDj3lAGhrllLiYk_hehmYoTuYDqt6gA9_ciaSnGQxFzg/exec', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify({ userId, lineUserId })
-});
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ userId, lineUserId })
+        });
 
-const result = await response.json(); // ←これで読み取れるようになる！
+        if (response.ok) {
+          const result = await response.json();
+          document.getElementById('status').innerText = 'LINE ID 登録完了';
+          console.log('送信結果:', result);
+        } else {
+          console.error('GASのレスポンスエラー');
+          document.getElementById('status').innerText = 'エラーが発生しました';
+        }
+      } catch (error) {
+        console.error('エラー:', error);
+        document.getElementById('status').innerText = 'エラーが発生しました';
+      }
+    }
 
+    // ✅ main 関数を呼び出す位置を正しく
     main();
   </script>
 </body>
