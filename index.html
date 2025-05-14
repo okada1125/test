@@ -40,7 +40,7 @@
 
         if (response.ok) {
           const result = await response.json();
-          document.getElementById('status').innerText = 'LINE ID 登録完了';
+          document.getElementById('status').innerText = 'LINE ID 登録完了'.lineUserId;
           console.log('送信結果:', result);
         } else {
           console.error('GASのレスポンスエラー');
