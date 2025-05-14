@@ -37,6 +37,7 @@
         // ★ ここで fetch（GASへPOST） ★
         const response = await fetch('https://script.google.com/macros/s/AKfycbwbFgK5tWQ7CDA0G_zCNFQeSKCDj3lAGhrllLiYk_hehmYoTuYDqt6gA9_ciaSnGQxFzg/exec', {
           method: 'POST',
+          mode: 'no-cors',
           headers: {
             'Content-Type': 'application/json'
           },
