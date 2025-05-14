@@ -36,24 +36,20 @@
 
         // ★ ここで fetch（GASへPOST） ★
         const response = await fetch('https://script.google.com/macros/s/AKfycbwbFgK5tWQ7CDA0G_zCNFQeSKCDj3lAGhrllLiYk_hehmYoTuYDqt6gA9_ciaSnGQxFzg/exec', {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ userId, lineUserId })
-        });
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({ userId, lineUserId })
+});
 
-        const result = await response.json();
-        document.getElementById('status').innerText = 'LINE ID 登録完了';
-        console.log('送信結果:', result);
-
-      } catch (error) {
-        console.error('エラー:', error);
-        document.getElementById('status').innerText = 'エラーが発生しました';
-      }
-    }
-
+if (response.ok) {
+  const result = await response.json();
+  document.getElementById('status').innerText = 'LINE ID 登録完了';
+} else {
+  console.error('GASのレスポンスエラー');
+  document.getElementById('status').innerText = 'エラーが発生しました';
+}
     main();
   </script>
 </body>
