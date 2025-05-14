@@ -34,7 +34,22 @@
         const profile = await liff.getProfile();
         const lineUserId = profile.userId;
 
-        // ★ ここで fetch（GASへPOST） ★
+//         // ★ ここで fetch（GASへPOST） ★
+//         const response = await fetch('https://script.google.com/macros/s/AKfycbwbFgK5tWQ7CDA0G_zCNFQeSKCDj3lAGhrllLiYk_hehmYoTuYDqt6gA9_ciaSnGQxFzg/exec', {
+//   method: 'POST',
+//   headers: {
+//     'Content-Type': 'application/json'
+//   },
+//   body: JSON.stringify({ userId, lineUserId })
+// });
+
+// if (response.ok) {
+//   const result = await response.json();
+//   document.getElementById('status').innerText = 'LINE ID 登録完了';
+// } else {
+//   console.error('GASのレスポンスエラー');
+//   document.getElementById('status').innerText = 'エラーが発生しました';
+// }
         const response = await fetch('https://script.google.com/macros/s/AKfycbwbFgK5tWQ7CDA0G_zCNFQeSKCDj3lAGhrllLiYk_hehmYoTuYDqt6gA9_ciaSnGQxFzg/exec', {
   method: 'POST',
   headers: {
@@ -43,13 +58,8 @@
   body: JSON.stringify({ userId, lineUserId })
 });
 
-if (response.ok) {
-  const result = await response.json();
-  document.getElementById('status').innerText = 'LINE ID 登録完了';
-} else {
-  console.error('GASのレスポンスエラー');
-  document.getElementById('status').innerText = 'エラーが発生しました';
-}
+const result = await response.json(); // ←これで読み取れるようになる！
+
     main();
   </script>
 </body>
