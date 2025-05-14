@@ -42,25 +42,28 @@
         console.log("✅ LINE User ID:", lineUserId);
 
         const response = await fetch('https://script.google.com/macros/s/AKfycbz7AiBM2R5EyKQzPlwhUh6wFIlQ3AfhTp3ED1qcEmIebMmGlV-xBI08PDoRaFMHRVhC/exec', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded',
-  },
-  body: new URLSearchParams({ userId, lineUserId })
-});
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+          body: new URLSearchParams({ userId, lineUserId })
+        });
 
-if (response.ok) {
-  const result = await response.json();
-  document.getElementById('status').innerText = 'LINE ID 登録完了';
-  console.log('送信結果:', result);
-} else {
-  console.error('GASからのレスポンスエラー:', response.statusText);
-  document.getElementById('status').innerText = 'GAS エラーが発生しました';
-
-
+        if (response.ok) {
+          const result = await response.json();
+          document.getElementById('status').innerText = 'LINE ID 登録完了';
+          console.log('送信結果:', result);
+        } else {
+          console.error('GASからのレスポンスエラー:', response.statusText);
+          document.getElementById('status').innerText = 'GAS エラーが発生しました';
+        }
+      } catch (error) {
+        console.error('エラー:', error);
+        document.getElementById('status').innerText = 'エラーが発生しました';
+      }
     }
 
-    main();
+    main();  // main関数を呼び出す場所を正しく修正しました
   </script>
 </body>
 </html>
