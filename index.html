@@ -50,8 +50,8 @@
         if (response.ok) {
           const result = await response.json();
           document.getElementById('status').innerText = 'LINE ID 登録完了';
+          document.getElementById('status').innerText = 'https://lin.ee/qpszPU7';
           console.log('送信結果:', result);
-          console.log('https://lin.ee/qpszPU7');
         } else {
           console.error('GASからのレスポンスエラー:', response.statusText);
           document.getElementById('status').innerText = 'GAS エラーが発生しました';
