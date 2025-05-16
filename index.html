@@ -12,22 +12,17 @@
   <script>
     async function main() {
       try {
-        // TODO：利用中のLIFFIDに書き換える
         await liff.init({ liffId: "2007402756-opA2x8xg" });
 
-        // リクエストに含まれているパラメータからNotionUserIDを取得する
         const urlParams = new URLSearchParams(window.location.search);
         const userId = urlParams.get('id');
 
-        // NotionUserIDが取得できない場合
         if (!userId) {
           document.getElementById('status').innerText = 'URLにIDがありません';
           return;
         }
 
-        // ユーザを
         if (!liff.isLoggedIn()) {
-          console.log("ログイン実行中");
           const currentUrl = new URL(window.location.href);
           liff.login({
             redirectUri: currentUrl.origin + currentUrl.pathname + window.location.search
@@ -35,7 +30,17 @@
           return;
         }
 
-        console.log("ログイン完了");
+        // ← ここで友だちかどうかを判定
+        const friendship = await liff.getFriendship();
+        if (!friendship.friendFlag) {
+          document.getElementById('status').innerHTML = `
+            まだLINEで友だち追加されていません。<br>
+            以下のリンクから友だち追加をお願いします：<br><br>
+            <a href="https://lin.ee/qpszPU7" target="_blank">▶ LINEで友だち追加</a>
+          `;
+          return;
+        }
+
         const profile = await liff.getProfile();
         const lineUserId = profile.userId;
 
@@ -49,8 +54,7 @@
 
         if (response.ok) {
           const result = await response.json();
-          document.getElementById('status').innerText = 'LINE ID 登録完了';
-          document.getElementById('status').innerText = 'https://lin.ee/qpszPU7';
+          document.getElementById('status').innerText = 'LINE ID 登録完了しました ✅';
           console.log('送信結果:', result);
         } else {
           console.error('GASからのレスポンスエラー:', response.statusText);
