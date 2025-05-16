@@ -2,11 +2,10 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>LIFF Test</title>
+  <title>LINE連携</title>
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 </head>
 <body>
-  <h1>LIFFアプリ</h1>
   <p id="status">そのまましばらくお待ちください</p>
 
   <script>
@@ -57,7 +56,6 @@
           `;
           return;
           console.log('送信結果:', result);
-          console.log('https://lin.ee/qpszPU7');
         } else {
           console.error('GASからのレスポンスエラー:', response.statusText);
           document.getElementById('status').innerText = 'GAS エラーが発生しました';
