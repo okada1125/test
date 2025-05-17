@@ -30,6 +30,7 @@
 
         const profile = await liff.getProfile();
         const lineUserId = profile.userId;
+        const SECRET_TOKEN = "Dp8#uG6XKz!tY3w@N2vFbMq$e9Jr7ZcPLWhR1AoExUi*sdTfQVy0mBgCnHx4lEKI";
 
         const response = await fetch('https://script.google.com/macros/s/AKfycbw9VfTpeJRUOUdeRg2eKmBWRd55IX0zyI3Cv3Cj4nxUA0eqhca8dwxg3a7EIc9fL2uQHw/exec', {
           method: 'POST',
@@ -39,7 +40,7 @@
           body: new URLSearchParams({
             userId,
             lineUserId,
-            token: 'your-very-secret-token' // トークンをここに
+            token: SECRET_TOKEN
           })
         });
 
