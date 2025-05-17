@@ -33,7 +33,7 @@
         const response = await fetch('https://script.google.com/macros/s/AKfycbxEUMr5pGfgUw6sXhKBvH9_aiFpXhmpzLHAQXYfwPiV-iKxKSK0TBQl4l0pNJfpHi2eTA/exec', {
           method: 'POST',
           headers: {
-              'Content-Type': 'application/json',
+              'Content-Type': 'application/x-www-form-urlencoded',
           },
           body: new URLSearchParams({
             userId,
